@@ -1,0 +1,189 @@
+body, html, #root {
+  background: #181a1f; /* revert to a dark background */
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.mtg-app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: transparent; /* let body color show through */
+  color: #fff;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.search-bar {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  justify-content: center;
+}
+.search-bar input {
+  padding: 0.5em 1em;
+  border-radius: 6px;
+  border: none;
+  font-size: 1.1em;
+  width: 300px;
+}
+.search-bar button {
+  background: #646cff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5em 1.2em;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.search-bar button:hover {
+  background: #535bf2;
+}
+
+.search-results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+  background: transparent !important;
+}
+.card-result {
+  background: #23272f; /* darker card result background */
+  border-radius: 8px;
+  padding: 0.5rem 1rem 1rem 1rem;
+  box-shadow: 0 2px 8px #0004;
+  text-align: center;
+  width: 180px;
+}
+.card-result img {
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+.card-result button {
+  margin: 0.2em 0.2em 0 0;
+  font-size: 0.95em;
+  padding: 0.3em 0.8em;
+}
+
+.virtual-table {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background: #23272f; /* darker table background */
+  border-radius: 16px;
+  padding: 2rem 1rem;
+  box-shadow: 0 4px 24px #0006;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.player-area {
+  background: #23272f;
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 0 2rem;
+  width: auto;
+  max-width: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.player-area h2 {
+  margin-top: 0;
+  font-size: 1.3em;
+  letter-spacing: 1px;
+}
+.card-row {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  min-height: 120px;
+  align-items: center;
+}
+.table-card {
+  width: 110px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #0006;
+  background: #f3f4f8; /* make the white a bit darker */
+  transition: transform 0.15s;
+}
+.table-card:hover {
+  transform: scale(1.07) rotate(-2deg);
+  z-index: 2;
+}
+
+.summary-section {
+  width: 100%;
+  max-width: 1200px;
+  margin: 2rem auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.summary-section label {
+  color: #fff;
+  font-size: 1.1em;
+  margin-bottom: 0.5em;
+}
+.summary-textarea {
+  width: 100%;
+  max-width: 900px;
+  min-height: 80px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #23272f;
+  color: #fff;
+  font-size: 1.05em;
+  padding: 1em;
+  margin-bottom: 1.5em;
+  resize: vertical;
+  box-sizing: border-box;
+}
