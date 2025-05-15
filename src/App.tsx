@@ -221,7 +221,6 @@ function SavedTablesPanel({
   setSavedTables: React.Dispatch<React.SetStateAction<SavedTable[]>>
 }) {
   const [saveName, setSaveName] = useState('')
-  const [collapsed, setCollapsed] = useState(false)
 
   const saveCurrentTable = () => {
     if (!saveName.trim()) return
@@ -247,22 +246,7 @@ function SavedTablesPanel({
   }
   return (
     <>
-      <div style={{ marginBottom: '1em', display: 'flex', gap: 6, alignItems: 'center' }}>
-        <button
-          onClick={() => setCollapsed(c => !c)}
-          style={{
-            background: '#eee',
-            border: '1px solid #bbb',
-            borderRadius: 6,
-            padding: '0.3em 0.8em',
-            fontSize: '1em',
-            cursor: 'pointer',
-            marginRight: 8
-          }}
-          aria-label={collapsed ? 'Expand saved tables' : 'Collapse saved tables'}
-        >
-          {collapsed ? '▶' : '▼'}
-        </button>
+      <div style={{ marginBottom: '1em', display: 'flex', gap: 6 }}>
         <input
           type="text"
           value={saveName}
@@ -272,17 +256,15 @@ function SavedTablesPanel({
         />
         <button onClick={saveCurrentTable} style={{ width: '28%', background: '#0275d8', color: '#fff', border: 'none', borderRadius: 6, padding: '0.5em 0', fontSize: '1em', cursor: 'pointer' }}>Save</button>
       </div>
-      {!collapsed && (
-        <ul style={{ listStyle: 'none', padding: 0, margin: 0, maxHeight: '30vh', overflowY: 'auto' }}>
-          {savedTables.length === 0 && <li style={{ color: '#888', fontSize: '0.98em' }}>No saved tables.</li>}
-          {savedTables.map(table => (
-            <li key={table.id} style={{ marginBottom: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <button onClick={() => handleRestore(table)} style={{ flex: 1, background: '#fff', border: '1px solid #0275d8', color: '#0275d8', borderRadius: 6, padding: '0.3em 0.7em', fontSize: '1em', cursor: 'pointer', textAlign: 'left', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{table.name}</button>
-              <button onClick={() => handleDelete(table.id)} style={{ background: 'none', border: 'none', color: '#d9534f', fontSize: '1.2em', cursor: 'pointer', marginLeft: 2 }} title="Delete">&times;</button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul style={{ listStyle: 'none', padding: 0, margin: 0, maxHeight: '30vh', overflowY: 'auto' }}>
+        {savedTables.length === 0 && <li style={{ color: '#888', fontSize: '0.98em' }}>No saved tables.</li>}
+        {savedTables.map(table => (
+          <li key={table.id} style={{ marginBottom: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <button onClick={() => handleRestore(table)} style={{ flex: 1, background: '#fff', border: '1px solid #0275d8', color: '#0275d8', borderRadius: 6, padding: '0.3em 0.7em', fontSize: '1em', cursor: 'pointer', textAlign: 'left', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{table.name}</button>
+            <button onClick={() => handleDelete(table.id)} style={{ background: 'none', border: 'none', color: '#d9534f', fontSize: '1.2em', cursor: 'pointer', marginLeft: 2 }} title="Delete">&times;</button>
+          </li>
+        ))}
+      </ul>
     </>
   )
 }
@@ -870,30 +852,6 @@ function App() {
           <button onClick={clearTable} style={{ background: '#d9534f', color: '#fff', padding: '0.5em 1.2em', border: 'none', borderRadius: '6px', fontSize: '1.1em', cursor: 'pointer' }}>Clear Table</button>
           <button onClick={saveTable} style={{ background: '#0275d8', color: '#fff', padding: '0.5em 1.2em', border: 'none', borderRadius: '6px', fontSize: '1.1em', cursor: 'pointer' }}>Save Table</button>
         </div>
-        {/* Centered Saved Tables Panel below Save Table button */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2em' }}>
-          <div style={{ minWidth: 220, maxWidth: 260, background: '#f4f6fa', borderRadius: 10, boxShadow: '0 2px 8px #0001', padding: '1.2em 1em', alignSelf: 'center' }}>
-            <h3 style={{ marginTop: 0, marginBottom: '0.7em', fontWeight: 600, fontSize: '1.1em', color: '#333' }}>Saved Tables</h3>
-            <SavedTablesPanel
-              getCurrentState={() => ({
-                playerAreas,
-                playerHealth,
-                tapped,
-                attacking,
-                blocking
-              })}
-              restoreTable={(data) => {
-                setPlayerAreas(data.playerAreas)
-                setPlayerHealth(data.playerHealth)
-                setTapped(data.tapped)
-                setAttacking(data.attacking)
-                setBlocking(data.blocking)
-              }}
-              savedTables={savedTables}
-              setSavedTables={setSavedTables}
-            />
-          </div>
-        </div>
         <form className="search-bar" onSubmit={e => e.preventDefault()}>
           <input
             type="text"
@@ -929,11 +887,134 @@ function App() {
           </div>
         )}
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', gap: '1.5em', flexWrap: 'wrap' }}>
+          {/* Left panel: Saved Tables only */}
+          <div style={{ minWidth: 220, maxWidth: 260, background: '#f4f6fa', borderRadius: 10, boxShadow: '0 2px 8px #0001', padding: '1.2em 1em', marginRight: '1em', alignSelf: 'flex-start' }}>
+            <h3 style={{ marginTop: 0, marginBottom: '0.7em', fontWeight: 600, fontSize: '1.1em', color: '#333' }}>Saved Tables</h3>
+            <SavedTablesPanel
+              getCurrentState={() => ({
+                playerAreas,
+                playerHealth,
+                tapped,
+                attacking,
+                blocking
+              })}
+              restoreTable={(data) => {
+                setPlayerAreas(data.playerAreas)
+                setPlayerHealth(data.playerHealth)
+                setTapped(data.tapped)
+                setAttacking(data.attacking)
+                setBlocking(data.blocking)
+              }}
+              savedTables={savedTables}
+              setSavedTables={setSavedTables}
+            />
+          </div>
           {/* Main play area and right panel */}
-          <div style={{ display: 'flex', flexDirection: 'column', minWidth: '400px', maxWidth: '1600px', flex: 1 }}>
-            <div className="virtual-table" style={{ minWidth: '400px', maxWidth: '1600px', margin: '0 auto' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', minWidth: '300px', maxWidth: '1100px', flex: 1 }}>
+            <div className="virtual-table" style={{ minWidth: '300px', maxWidth: '1100px', margin: '0 auto' }}>
               <PlayerArea areaIdx={0} cards={playerAreas[0]} onDropCard={moveCard} onCardClick={handleCardClick} tappedCards={tapped[0]} attackingCards={attacking[0]} blockingMap={blocking} onUntap={handleUntap} onZoom={setZoomCard} health={playerHealth[0]} onHealthChange={h => setPlayerHealth([h, playerHealth[1]])} removeCardFromArea={removeCardFromArea} />
               <PlayerArea areaIdx={1} cards={playerAreas[1]} onDropCard={moveCard} onCardClick={handleCardClick} tappedCards={tapped[1]} attackingCards={attacking[1]} blockingMap={blocking} onUntap={handleUntap} onZoom={setZoomCard} health={playerHealth[1]} onHealthChange={h => setPlayerHealth([playerHealth[0], h])} removeCardFromArea={removeCardFromArea} />
+            </div>
+            {/* Card States and Summary on the right */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5em', marginTop: '1.5em' }}>
+              <div style={{ background: '#f8f9fa', borderRadius: '10px', boxShadow: '0 2px 8px #0001', padding: '1.2em', marginTop: '0' }}>
+                <h3 style={{ marginTop: 0, marginBottom: '0.7em', fontWeight: 600, fontSize: '1.15em', color: '#333' }}>Card States</h3>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                  {[0, 1].flatMap(areaIdx =>
+                    playerAreas[areaIdx].map((card, i) => {
+                      // Show stats if available
+                      let stats = ''
+                      if (cardStats && cardStats[card.id] && typeof cardStats[card.id].power === 'number' && typeof cardStats[card.id].toughness === 'number') {
+                        stats = ` ${cardStats[card.id].power}/${cardStats[card.id].toughness}`
+                      } else if (
+                        card.power !== undefined && card.power !== null && card.power !== '' && !isNaN(Number(card.power)) &&
+                        card.toughness !== undefined && card.toughness !== null && card.toughness !== '' && !isNaN(Number(card.toughness))
+                      ) {
+                        stats = ` ${Number(card.power)}/${Number(card.toughness)}`
+                      }
+                      if (blocking[areaIdx + ':' + i]) {
+                        const blocked = blocking[areaIdx + ':' + i]
+                        const oppCard = playerAreas[blocked.opponentArea][blocked.opponentIdx]
+                        return <li key={card.id + ':block'} style={{ marginBottom: '0.5em' }}>
+                          <span style={{ fontWeight: 500 }}>Player {areaIdx + 1}:</span> <span style={{ color: '#0275d8' }}>{card.name}{stats}</span> <span style={{ color: '#0275d8', fontWeight: 500 }}>[Blocking {oppCard?.name}]</span>
+                        </li>
+                      }
+                      if (attacking[areaIdx]?.[i]) {
+                        return <li key={card.id + ':atk'} style={{ marginBottom: '0.5em' }}>
+                          <span style={{ fontWeight: 500 }}>Player {areaIdx + 1}:</span> <span style={{ color: '#d9534f' }}>{card.name}{stats}</span> <span style={{ color: '#d9534f', fontWeight: 500 }}>[Attacking]</span>
+                        </li>
+                      }
+                      if (tapped[areaIdx]?.[i] && card.oracle_text) {
+                        return <li key={card.id + ':act'} style={{ marginBottom: '0.5em' }}>
+                          <span style={{ fontWeight: 500 }}>Player {areaIdx + 1}:</span> <span style={{ color: '#0275d8' }}>{card.name}{stats}</span> <span style={{ color: '#0275d8', fontWeight: 500 }}>[Activated Ability]</span>
+                        </li>
+                      }
+                      if (tapped[areaIdx]?.[i] && !card.oracle_text) {
+                        return <li key={card.id + ':tap'} style={{ marginBottom: '0.5em' }}>
+                          <span style={{ fontWeight: 500 }}>Player {areaIdx + 1}:</span> <span style={{ color: '#888' }}>{card.name}{stats}</span> <span style={{ color: '#888', fontWeight: 500 }}>[Tapped]</span>
+                        </li>
+                      }
+                      return null
+                    })
+                  )}
+                  {[0, 1].every(areaIdx => playerAreas[areaIdx].every((_, i) => !blocking[areaIdx + ':' + i] && !attacking[areaIdx]?.[i] && !(tapped[areaIdx]?.[i] && playerAreas[areaIdx][i].oracle_text))) && (
+                    <li style={{ color: '#888' }}>No cards are currently attacking or have activated abilities.</li>
+                  )}
+                </ul>
+              </div>
+              {/* Match Summary Section for AI Rule Resolution */}
+              <div className="summary-section">
+                <label htmlFor="match-summary">Match Summary (for AI rule questions):</label>
+                <div style={{ width: '100%', maxWidth: 900, position: 'relative' }}>
+                  <textarea
+                    id="match-summary"
+                    className="summary-textarea"
+                    value={generateMatchSummary(playerHealth, playerAreas, attacking, tapped, blocking, cardStats)}
+                    readOnly
+                    placeholder="Summarize the current match state, actions, or rule question here to feed to an AI."
+                    style={{ paddingRight: '3em' }}
+                  />
+                  <button
+                    type="button"
+                    style={{
+                      position: 'absolute',
+                      top: 14,
+                      right: 14,
+                      background: 'rgba(100,108,255,0.92)',
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: '32px',
+                      height: '32px',
+                      minWidth: 0,
+                      minHeight: 0,
+                      padding: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '1.25em',
+                      boxShadow: '0 2px 8px #0002',
+                      cursor: 'pointer',
+                      zIndex: 2,
+                      transition: 'background 0.18s',
+                    }}
+                    onClick={() => {
+                      const textarea = document.getElementById('match-summary') as HTMLTextAreaElement
+                      if (textarea) {
+                        textarea.select()
+                        document.execCommand('copy')
+                      }
+                    }}
+                    title="Copy summary to clipboard"
+                    aria-label="Copy summary to clipboard"
+                  >
+                    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="6" y="6" width="9" height="9" rx="2" fill="white" fillOpacity="0.7"/>
+                      <rect x="3" y="3" width="9" height="9" rx="2" stroke="white" strokeWidth="1.5" fill="none"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -952,13 +1033,13 @@ function App() {
         zIndex: 10
       }}>
         <span style={{ fontWeight: 500, marginRight: 8 }}>AI Assistants:</span>
-        <a href="https://chat.openai.com/" target="_blank" rel="noopener noreferrer" style={{ margin: '0 0.7em', color: '#4f8cff', textDecoration: 'none' }}>ChatGPT</a>
-        <a href="https://copilot.microsoft.com/" target="_blank" rel="noopener noreferrer" style={{ margin: '0 0.7em', color: '#0078d4', textDecoration: 'none' }}>MS Copilot</a>
-        <a href="https://github.com/features/copilot" target="_blank" rel="noopener noreferrer" style={{ margin: '0 0.7em', color: '#24292f', textDecoration: 'none' }}>GitHub Copilot</a>
-        <a href="https://grok.x.ai/" target="_blank" rel="noopener noreferrer" style={{ margin: '0 0.7em', color: '#ff4f4f', textDecoration: 'none' }}>Grok</a>
-        <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" style={{ margin: '0 0.7em', color: '#4285f4', textDecoration: 'none' }}>Google Gemini</a>
-        <a href="https://claude.ai/" target="_blank" rel="noopener noreferrer" style={{ margin: '0 0.7em', color: '#6f42c1', textDecoration: 'none' }}>Claude</a>
-        <a href="https://www.perplexity.ai/" target="_blank" rel="noopener noreferrer" style={{ margin: '0 0.7em', color: '#111', textDecoration: 'none' }}>Perplexity</a>
+        <a href="https://chat.openai.com/" target="_blank" rel="noopener noreferrer" style={{ margin: '0 0.7em', color: '#7ecbff', textDecoration: 'none', fontWeight: 600 }}>ChatGPT</a>
+        <a href="https://copilot.microsoft.com/" target="_blank" rel="noopener noreferrer" style={{ margin: '0 0.7em', color: '#5ec3ff', textDecoration: 'none', fontWeight: 600 }}>MS Copilot</a>
+        <a href="https://github.com/features/copilot" target="_blank" rel="noopener noreferrer" style={{ margin: '0 0.7em', color: '#e6e6e6', textDecoration: 'none', fontWeight: 600 }}>GitHub Copilot</a>
+        <a href="https://grok.x.ai/" target="_blank" rel="noopener noreferrer" style={{ margin: '0 0.7em', color: '#ff8b8b', textDecoration: 'none', fontWeight: 600 }}>Grok</a>
+        <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" style={{ margin: '0 0.7em', color: '#a6c8ff', textDecoration: 'none', fontWeight: 600 }}>Google Gemini</a>
+        <a href="https://claude.ai/" target="_blank" rel="noopener noreferrer" style={{ margin: '0 0.7em', color: '#e0c6ff', textDecoration: 'none', fontWeight: 600 }}>Claude</a>
+        <a href="https://www.perplexity.ai/" target="_blank" rel="noopener noreferrer" style={{ margin: '0 0.7em', color: '#fff', textDecoration: 'none', fontWeight: 600 }}>Perplexity</a>
       </footer>
     </DndProvider>
   )
